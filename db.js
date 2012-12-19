@@ -1,8 +1,8 @@
 
-var levelup = process.title == 'node' ? (require)('levelup') : require('levelidb')
-
+var levelup = require('levelup')
 var lScuttlebutt = require('level-scuttlebutt')
 var udid = require('./udid')
+
 function parse (s) {
   try {
     return JSON.parse(s)

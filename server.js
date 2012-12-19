@@ -8,9 +8,9 @@ var stack    = require('stack')
 var MuxDemux = require('mux-demux')
 var through  = require('through')
 
-var Document = require('./document')
+var config   = require('./config')
 
-var PORT     = 3000
+var Document = require('./document')
 
 var udid = require('udid')('wikiwiki')
 //var edit = require('r-edit')(udid)
@@ -39,6 +39,7 @@ require('./db')(function (err, db) {
           ts.resume()
         })
       } else if(Array.isArray(stream.meta)) {
+        //reduce the 10 most recently modified documents.
         db.mapReduce
           .view('latest10', stream.meta)
           .pipe(through(function (data) {
@@ -53,12 +54,13 @@ require('./db')(function (err, db) {
   })).install(http.createServer(
     stack(
       ecstatic(join(__dirname, 'static')),
+      //send the index page for any url - then the client opens the right scuttlebutt doc.
       function (_, res) {
         res.end(indexHtml)
       }
     )
-  ).listen(PORT, function () {
-    console.log( 'listening on', PORT)
+  ).listen(config.port, function () {
+    console.log( 'listening on', config.port)
   }), '/shoe')
   
 })

@@ -15,7 +15,7 @@
     "reconnect": "~0.1.2",
     "udid": "0.0.2",
     "rc": "0.0.6",
-    "level-scuttlebutt": "~0.1.3",
+    "level-scuttlebutt": "~1.0.0",
     "levelup": "~0.3.2",
     "r-edit": "0.0.6",
     "client-reloader": "~1.0.2",

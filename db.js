@@ -13,7 +13,7 @@ function parse (s) {
 
 function setup (db) {
 
-  lScuttlebutt(udid, require('./schema'))(db)
+  lScuttlebutt(db, udid, require('./schema'))
 
   db.scuttlebutt.addMapReduce({
     name: 'latest10',

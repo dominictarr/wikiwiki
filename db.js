@@ -1,7 +1,7 @@
 
 var levelup = require('levelup')
 var lScuttlebutt = require('level-scuttlebutt')
-var udid = require('./udid')
+var udid = require('udid')('wikiwiki')
 
 function parse (s) {
   try {
@@ -19,7 +19,7 @@ function setup (db) {
     name: 'latest10',
     map: function (key, value) {
       var name = value.meta.get('name') || 'no_name'
-      this.emit([], JSON.stringify({name: name, time: Date.now(), length: value.length}))
+      this.emit([], JSON.stringify({name: name, time: Date.now(), length: value.text.length}))
     },
     reduce: function (big, little) {
       var all = parse(big).concat(parse(little))

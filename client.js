@@ -6,7 +6,7 @@ var MuxDemux  = require('mux-demux')
 var view      = require('./view')
 var schema    = require('./schema')
 
-var udid = require('./udid')
+var udid = require('udid')('wikiwiki')
 
 var h = require('h')
 var rWidget

@@ -13,6 +13,7 @@ var config   = require('./config')
 var Document = require('./document')
 
 var udid = require('udid')('wikiwiki')
+
 //var edit = require('r-edit')(udid)
 var fs = require('fs')
 var indexHtml = fs.readFileSync(__dirname + '/static/index.html')

@@ -24,10 +24,6 @@ module.exports = function (db) {
     } else if(Array.isArray(stream.meta)) {
       //reduce the 10 most recently modified documents.
       db.mapReduce.view.apply(db.mapReduce.view, stream.meta)
-
-/*      db.mapReduce
-        .view('latest10', stream.meta)
-*/
         .pipe(through(function (data) {
           this.queue(JSON.parse(data.value))
         }))

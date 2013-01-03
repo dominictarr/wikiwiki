@@ -1,7 +1,7 @@
 
 var levelup = require('levelup')
 var lScuttlebutt = require('level-scuttlebutt')
-var udid = require('udid')('wikiwiki')
+var udid = require('udid')
 
 function parse (s) {
   try {

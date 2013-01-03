@@ -1,7 +1,8 @@
 var reconnect = require('reconnect')
 var reloader  = require('client-reloader')
 var page      = require('page')
-var MuxDemux  = require('mux-demux')
+
+var SbClient  = require('./scuttlebutt-client')
 
 var view      = require('./view')
 var schema    = require('./schema')
@@ -37,21 +38,11 @@ var name = ctx.params.name
 
 var r = reconnect(reloader(function (stream) {
   console.log('connection')
-  var mx = MuxDemux()
-  mx.pipe(stream).pipe(mx)
+  var client = SbClient(schema)
+  stream.pipe(client).pipe(stream)
 
-  //open a scuttlebutt instance
-
-  var openScuttlebutt = 
-    require('scuttlebutt-schema')
-      .open(schema,
-        function (name) {
-          return mx.createStream(name)
-        })
-
-  //recently updated documents.
-
-  mx.createStream([]).on('data', function (d) {
+  client.view('latest10', [])
+    .on('data', function (d) {
     recent.innerHTML = ''
     recent.appendChild(h('ul', d.map(function (e) {
         return h('li',
@@ -62,7 +53,7 @@ var r = reconnect(reloader(function (stream) {
   })
 
   //create a new item...
-  openScuttlebutt('doc-'+name, function (_, doc) {
+  client.open('doc-'+name, function (_, doc) {
     DOC = doc
     
     var content = document.getElementById('content')

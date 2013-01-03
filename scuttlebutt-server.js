@@ -15,9 +15,6 @@ module.exports = function (db) {
       //so that the 'sync' event fires the right time,
       //and the open method works on the client too.
       db.scuttlebutt(stream.meta, function (err, doc) {
-        /*if(doc.meta.get('name') != name) {
-          doc.meta.set('name', name)
-        }*/
         ts.pipe(doc.createStream()).pipe(stream)
         ts.resume()
       })

@@ -2,7 +2,8 @@ var reconnect = require('reconnect')
 var reloader  = require('client-reloader')
 var page      = require('page')
 
-var SbClient  = require('./scuttlebutt-client')
+//var SbClient  = require('./scuttlebutt-client')
+var SbClient  = require('./scuttlebutt-remote')
 
 var view      = require('./view')
 var schema    = require('./schema')

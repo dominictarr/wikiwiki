@@ -5,7 +5,7 @@ var http     = require('http')
 var join     = require('path').join
 var reloader = require('client-reloader')
 var stack    = require('stack')
-var SbServer = require('./scuttlebutt-server')
+var SbServer = require('./scuttlebutt-remote')
 var config   = require('./config')
 
 var Document = require('./document')

@@ -1,5 +1,5 @@
 {
-  "name": "shoe",
+  "name": "wikiwiki",
   "version": "0.0.0",
   "homepage": "https://github.com/dominictarr/wikiwiki",
   "repository": {
@@ -15,7 +15,7 @@
     "reconnect": "~0.1.2",
     "udid": "0.1.0",
     "rc": "0.0.6",
-    "level-scuttlebutt": "~1.1-0",
+    "level-scuttlebutt": "~1.1.0",
     "levelup": "~0.3.2",
     "r-edit": "0.0.6",
     "client-reloader": "~1.0.2",

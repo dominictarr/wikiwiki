@@ -1,38 +1,44 @@
 
-var shoe     = require('shoe')
-var ecstatic = require('ecstatic')
-var http     = require('http')
 var join     = require('path').join
-var reloader = require('client-reloader')
-var stack    = require('stack')
-var SbServer = require('./scuttlebutt-remote')
 var config   = require('./config')
 
 var Document = require('./document')
 
-var udid = require('udid')('wikiwiki')
-
 var fs = require('fs')
 var indexHtml = fs.readFileSync(__dirname + '/static/index.html')
 
-require('./db')(function (err, db) {
+function parse (s) {
+  try {
+    return JSON.parse(s)
+  } catch (_) {
+    return []
+  }
+}
 
-  shoe(reloader(function (stream) {
-
-    console.log('connection')
-    //echo server
-    stream.pipe(SbServer(db)).pipe(stream)
-
-  })).install(http.createServer(
-    stack(
-      ecstatic(join(__dirname, 'static')),
-      //send the index page for any url - then the client opens the right scuttlebutt doc.
-      function (_, res) {
-        res.end(indexHtml)
-      }
-    )
-  ).listen(config.port, function () {
-    console.log( 'listening on', config.port)
-  }), '/shoe')
-  
+require('rumours/server')({
+  name: 'wikiwiki',
+  root:'/tmp/wikiwiki',
+  schema: require('./schema'),
+  static: './static',
+  views: [{
+    name: 'latest10',
+    map: function (key, value) {
+      var name = (value.name || 'no_name').replace('doc-', '')
+      this.emit([], JSON.stringify({name: name, time: Date.now(), length: value.text.length}))
+    },
+    reduce: function (big, little) {
+      var all = parse(big).concat(parse(little))
+      //sort by time, decending.
+      all.sort(function (a, b) {
+        return b.time - a.time
+      })
+      //top ten most recent
+      var all = all.slice(0, 10)
+      return JSON.stringify(all)
+    },
+    initial: '[]'
+  }]
+}).listen(3000, function () {
+  console.log('listening on 3000')
 })
+

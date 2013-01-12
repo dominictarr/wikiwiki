@@ -14,7 +14,7 @@
     "query-stream": "0.0.1",
     "el-streamo": "~1.0.0",
     "h": "~0.1.0",
-    "rumours": "~1.0.3"
+    "rumours": "~1.1"
   },
   "devDependencies": {
     "browserify": "*"

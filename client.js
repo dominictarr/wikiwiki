@@ -1,27 +1,57 @@
-var view      = require('./view')
-var schema    = require('./schema')
+var renderWidget = require('r-edit/widget')
 
 var h = require('h')
 
-function log() {
-  function s (e) {
-    return JSON.stringify(e)
-  }
-  document.body.appendChild(h('pre', [].map.call(arguments, s)))  
+//config code, schema, etc used on CLIENT and SERVER
+var client = require('rumours')(require('./config'))
+
+var content, textarea, recent, title
+
+function replace (el, withEl) {
+  el.parentElement.replaceChild(withEl, el)
+  return withEl
 }
 
-var recent = h('div')
-document.body.appendChild(recent)
+function get(el) {
+  if('string' === typeof el)
+    return document.getElementById(el)
+  return el
+}
 
-//putting this inside of page is wrong actually...
-//the pushState and the stream are orthagonal.
+function toggle (label, checked, element) {
+  var input
+  function change () {
+    var el = get(element)
+    el && el.style.setProperty('display', input.checked ? 'block' : 'none')
+  }
+  return h('div.toggelable', label, 
+    {style: {display: 'inline-block'}},
+    input = h('input', {
+      type: 'checkbox', 
+      change: change,
+      checked: checked
+    })
+  )
+}
 
-var client = require('rumours/client')({
-  name: 'wikiwiki', schema: require('./schema')
-})
+document.body.appendChild(
+  h('div#content', 
+    client.widget(),
+    recent = h('div'),
+    title = h('h1'),
+    h('div#text', 
+      //edit text...
+      h('div', toggle('editor',  true, 'edit_container')),
+      h('div#edit_container',
+        {style: {float: 'left'}},
+        textarea = h('textarea', {rows: 32, cols: 80})
+      ),
+      h('div#render_container', render = h('div'))
+    )
+  )
+)
 
-//show a connection status widget...
-document.body.appendChild(client.widget())
+//display recent documents...
 
 client.view('latest10', [])
   .on('data', function (d) {
@@ -34,14 +64,9 @@ client.view('latest10', [])
   ))
 })
 
-
-//create a new item...
-function parseHash () { 
-  return window.location.hash.substring(1) || 'hello'
-}
+//display current document.
 
 var doc
-
 function openDoc () {
   //get document name from the location hash. 
   var name = window.location.hash.substring(1) || 'hello'
@@ -52,16 +77,15 @@ function openDoc () {
   client.open('doc-'+name, function (_, _doc) {
     doc = _doc
 
-    var content = document.getElementById('content')
-  
-    if(content)
-      document.body.removeChild(content)
-  
-    document.body.appendChild(view(doc, name))
+    var _textarea = h('textarea#ta', {rows: 32, cols: 80})
+    doc.text.wrap(_textarea)
+    
+    textarea = replace(textarea, _textarea)
+    render   = replace(render, renderWidget(doc.text))
+    title.innerText = doc.name.replace('doc-', '')
   })
 }
 
 window.addEventListener('hashchange', openDoc)
-
 openDoc()
 

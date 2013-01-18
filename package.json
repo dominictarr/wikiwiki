@@ -10,18 +10,20 @@
     "scuttlebucket": "~0.2.2",
     "scuttlebutt": "~5.5",
     "rc": "0.0.6",
-    "r-edit": "0.0.8",
+    "r-edit": "~0.1.2",
     "query-stream": "0.0.1",
     "el-streamo": "~1.0.0",
     "h": "~0.1.0",
-    "rumours": "~1.1"
+    "rumours": "~1.1",
+    "browserify": "~1.17.2"
   },
   "devDependencies": {
-    "browserify": "*"
+    "browserify": "~1.17.2"
   },
   "scripts": {
     "test": "tap test",
-    "build": "browserify client.js -o static/bundle.js --debug"
+    "build": "browserify client.js -o static/bundle.js --debug",
+    "start": "browserify client.js -o static/bundle.js --debug && node server.js"
   },
   "author": "'Dominic Tarr' <dominic.tarr@gmail.com> (http://dominictarr.com)"
 }
